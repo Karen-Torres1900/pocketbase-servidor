@@ -1,18 +1,17 @@
-# Imagen base de Linux
+# Base: Alpine Linux
 FROM alpine:latest
 
-# Instala certificados para HTTPS
+# Instalar certificados
 RUN apk add --no-cache ca-certificates
 
-# Copia el binario de PocketBase
+# Copiar binario de PocketBase
 COPY pocketbase /app/pocketbase
 
-# Directorio de trabajo
+# Definir el directorio de trabajo
 WORKDIR /app
 
-# Expone el puerto que usa PocketBase
-EXPOSE 8090
+# Hacer ejecutable el binario (por si acaso)
+RUN chmod +x pocketbase
 
 # Comando para iniciar PocketBase
 CMD ["./pocketbase", "serve", "--http=0.0.0.0:8090"]
-
