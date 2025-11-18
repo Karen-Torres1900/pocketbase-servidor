@@ -14,4 +14,5 @@ WORKDIR /app
 EXPOSE 8090
 
 # Comando para iniciar PocketBase
-CMD ["./pocketbase", "serve"]
+CMD ["./pocketbase", "serve", "--http=0.0.0.0:8090"]
+
