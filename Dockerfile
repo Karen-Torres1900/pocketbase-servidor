@@ -1,17 +1,23 @@
-# Base: Alpine Linux
+# Imagen base
 FROM alpine:latest
 
-# Instalar certificados
-RUN apk add --no-cache ca-certificates
+# Instalar dependencias necesarias
+RUN apk add --no-cache ca-certificates bash
 
-# Copiar binario de PocketBase
+# Copiar PocketBase
 COPY pocketbase /app/pocketbase
 
-# Definir el directorio de trabajo
+# Copiar script de inicialización
+COPY init_admin.sh /app/init_admin.sh
+
+# Dar permisos de ejecución
+RUN chmod +x /app/pocketbase && chmod +x /app/init_admin.sh
+
+# Directorio de trabajo
 WORKDIR /app
 
-# Hacer ejecutable el binario (por si acaso)
-RUN chmod +x pocketbase
+# Exponer puerto
+EXPOSE 8090
 
-# Comando para iniciar PocketBase
-CMD ["./pocketbase", "serve", "--http=0.0.0.0:8090"]
+# Comando de arranque
+CMD [ "sh", "-c", "./init_admin.sh && ./pocketbase serve --http=0.0.0.0:8090" ]
